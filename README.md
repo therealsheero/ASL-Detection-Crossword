@@ -109,6 +109,18 @@ This model can be integrated into a real-time webcam-based ASL interpreter using
 
 ---
 
+## Demo Images
+
+![1.jpeg](assets/1.jpeg)
+
+![2.jpeg](assets/2.jpeg)
+
+![3.jpeg](assets/3.jpeg)
+
+![4.jpeg](assets/4.jpeg)
+
+---
+
 ## 🚀 Future Work
 
 * Add multiplayer crossword challenges

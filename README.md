@@ -107,7 +107,7 @@ This game helps users reinforce their learning through interaction — as each c
 * Collect your own ASL dataset using `Collect_Data.py`
 * Train the model with `train_pth.ipynb`
 * Test real-time ASL detection with `test.py`
-* Play the ASL-powered crossword game using `app_CSVCross.py`
+* Play the ASL-powered crossword game using `app.py`
 
 This model can be integrated into a real-time webcam-based ASL interpreter using OpenCV and MediaPipe or cvzone. Load the model, capture the hand ROI, preprocess it, and run predictions — now also connected to the crossword game for interactive learning!
 

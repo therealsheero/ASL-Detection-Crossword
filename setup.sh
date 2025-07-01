@@ -1,5 +1,4 @@
 #!/bin/bash
-apt-get update && apt-get install -y \
-    libopencv-core-dev \
-    libopencv-highgui-dev \
-    libopencv-imgproc-dev
+git clone https://github.com/google/mediapipe.git
+cd mediapipe
+python setup.py install

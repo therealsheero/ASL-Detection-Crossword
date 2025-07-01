@@ -1,4 +1,4 @@
-torch==2.0.1
+torch==2.5.1
 torchvision==0.15.2
 streamlit
 streamlit-webrtc

@@ -1,4 +1,5 @@
 #!/bin/bash
+# -*- mode: shell-script -*-
 set -e  # Exit immediately if any command fails
 
 # Install MediaPipe with explicit Python 3.12 wheel

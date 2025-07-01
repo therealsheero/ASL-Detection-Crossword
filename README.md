@@ -68,7 +68,7 @@ python test.py
 ## 🎮 ASL-Powered Crossword Game
 
 ```bash
-python app_CSVCross.py 
+python app.py 
 ```
 
 **How it works**:
@@ -94,7 +94,7 @@ This game helps users reinforce their learning through interaction — as each c
 * `Collect_Data.py`: Hand tracking + data saver
 * `train_pth.ipynb`: Model training pipeline
 * `test.py`: Live webcam detection
-* `app_CSVCross.py`: **ASL Crossword Game Application**
+* `app.py`: **ASL Crossword Game Application**
 
 ---
 

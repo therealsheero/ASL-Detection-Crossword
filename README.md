@@ -62,9 +62,7 @@ Test Accuracy: 98.3%
 ```bash
 python test.py 
 ```
-```bash
-streamlit run app.py
-```
+
 
 ---
 
@@ -72,6 +70,9 @@ streamlit run app.py
 
 ```bash
 python app.py 
+```
+```bash
+streamlit run app.py
 ```
 
 **How it works**:

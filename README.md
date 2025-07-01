@@ -62,6 +62,9 @@ Test Accuracy: 98.3%
 ```bash
 python test.py 
 ```
+```bash
+streamlit run app.py
+```
 
 ---
 

@@ -11,3 +11,4 @@ matplotlib
 seaborn
 tqdm
 cvzone
+mediapipe

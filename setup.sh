@@ -1,8 +1,15 @@
 #!/bin/bash
-#-*- mode: shell-script -*-
+set -e
 
-# Install MediaPipe with explicit Python 3.12 wheel
-pip install https://files.pythonhosted.org/packages/cp312/m/mediapipe/mediapipe-0.10.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+# Install system dependencies
+apt-get update && apt-get install -y \
+    python3.12 \
+    python3.12-dev \
+    python3-pip \
+    libopencv-core-dev \
+    libopencv-highgui-dev \
+    libopencv-imgproc-dev
 
-# Verify installation
-python -c "import mediapipe; print(f'Successfully installed MediaPipe {mediapipe.__version__}')"
+# Force Python 3.12 environment
+python3.12 -m pip install --upgrade pip
+python3.12 -m pip install https://files.pythonhosted.org/packages/cp312/m/mediapipe/mediapipe-0.10.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl

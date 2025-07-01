@@ -1,34 +1,12 @@
-# I am stating my Python versions and library versions 
-
-#Python version
-#Python 3.12.3
-
-# Core Packages
-torch==2.3.1
-torchvision==0.18.1
+torch>=2.0.0,<2.6
+torchvision>=0.15.0,<0.19
 numpy==1.26.4
 opencv-python==4.9.0.80
 pandas==2.2.2
-
-# MediaPipe/Hand Tracking
 mediapipe==0.10.21
 cvzone==1.6.1
-
-
-# Visualization & Evaluation
 matplotlib==3.9.0
 seaborn==0.13.2
 tqdm==4.67.1
-
-# Utils
 scikit-learn==1.5.0
 pillow==10.2.0
-
-
-# to install copy paste this into terminal/bash/cmd:
-#pip install torch==2.3.1 torchvision==0.18.1 numpy==1.26.4 opencv-python==4.9.0.80 pandas==2.2.2 mediapipe==0.10.21 cvzone==1.6.1 matplotlib==3.9.0 seaborn==0.13.2 tqdm==4.67.1 scikit-learn==1.5.0 pillow==10.2.0
-
-# Optional (For GPU Support)
-# torchaudio==2.3.1
-# nvidia-cudnn-cu12
-# cuda 12.8

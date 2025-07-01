@@ -11,4 +11,4 @@ matplotlib
 seaborn
 tqdm
 cvzone
-pip install mediapipe-silicon
+mediapipe-silicon

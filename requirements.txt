@@ -10,4 +10,5 @@ scikit-learn
 matplotlib
 seaborn
 tqdm
+mediapipe
 cvzone

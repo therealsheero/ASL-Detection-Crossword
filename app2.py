@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
 from streamlit_webrtc import RTCConfiguration
 import torch
 import torch.nn as nn
@@ -66,7 +66,7 @@ transform = transforms.Compose([
 ])
 
 # -------------------- Video Transformer --------------------
-class ASLTransformer(VideoTransformerBase):
+class ASLTransformer(VideoProcessorBase):
     def __init__(self):
         self.detector = HandDetector(maxHands=1)
         self.current_sign = ""
@@ -197,11 +197,20 @@ for row_idx in range(rows):
 if st.session_state.selected_cell:
     st.success(f"Selected Cell: {st.session_state.selected_cell}")
     RTC_CONFIGURATION = RTCConfiguration(
-    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+        {
+            "iceServers": [
+                {"urls": ["stun:stun.l.google.com:19302"]},
+                {
+                    "urls": ["turn:relay1.expressturn.com:3478"],
+                    "username": "efree",
+                    "credential": "efree"
+                }
+            ]
+        }
     )
     webrtc_ctx = webrtc_streamer(
         key=f"asl-crossword-{st.session_state.selected_cell}",
-        video_transformer_factory=ASLTransformer,
+        video_processor_factory=ASLTransformer,
         rtc_configuration=RTC_CONFIGURATION,
         media_stream_constraints={"video": True, "audio": False},
         async_processing=True,

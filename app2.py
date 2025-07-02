@@ -1,5 +1,6 @@
 import streamlit as st
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
+from streamlit_webrtc import RTCConfiguration
 import torch
 import torch.nn as nn
 from torchvision import models, transforms
@@ -195,9 +196,13 @@ for row_idx in range(rows):
 # -------------------- Webcam & Prediction --------------------
 if st.session_state.selected_cell:
     st.success(f"Selected Cell: {st.session_state.selected_cell}")
+    RTC_CONFIGURATION = RTCConfiguration(
+    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+    )
     webrtc_ctx = webrtc_streamer(
         key=f"asl-crossword-{st.session_state.selected_cell}",
         video_transformer_factory=ASLTransformer,
+        rtc_configuration=RTC_CONFIGURATION,
         media_stream_constraints={"video": True, "audio": False},
         async_processing=True,
     )

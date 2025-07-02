@@ -1,3 +1,0 @@
-libopencv-core-dev
-libopencv-highgui-dev
-libopencv-imgproc-dev

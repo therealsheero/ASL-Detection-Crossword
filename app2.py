@@ -199,15 +199,16 @@ if st.session_state.selected_cell:
     RTC_CONFIGURATION = RTCConfiguration(
         {
             "iceServers": [
-                {"urls": ["stun:stun.l.google.com:19302"]},
+                { "urls": ["stun:stun.l.google.com:19302"] },
                 {
-                    "urls": ["turn:relay1.expressturn.com:3478?transport=tcp"],
-                    "username": "efree",
-                    "credential": "efree"
+                    "urls": ["turn:numb.viagenie.ca"],
+                    "username": "webrtc@live.com",
+                    "credential": "muazkh"
                 }
             ]
         }
     )
+
     webrtc_ctx = webrtc_streamer(
         key=f"asl-crossword-{st.session_state.selected_cell}",
         video_processor_factory=ASLTransformer,
@@ -215,6 +216,11 @@ if st.session_state.selected_cell:
         media_stream_constraints={"video": True, "audio": False},
         async_processing=True,
     )
+    if webrtc_ctx.state.playing:
+        st.success("WebRTC connection is live 🎥")
+    else:
+        st.warning("Waiting for camera / WebRTC connection...")
+
 
     if webrtc_ctx.video_transformer:
         predicted_sign = webrtc_ctx.video_transformer.current_sign

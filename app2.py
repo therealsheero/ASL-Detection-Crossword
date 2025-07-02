@@ -46,7 +46,7 @@ set_bg_color()
 @st.cache_resource
 def load_model():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = models.mobilenet_v2(pretrained=False)
+    model = models.mobilenet_v2(weights = None)
     model.classifier[1] = nn.Linear(model.last_channel, 36)
     model.load_state_dict(torch.load("asl_mobilenetv2_best.pth", map_location=device))
     model.to(device)
@@ -201,7 +201,7 @@ if st.session_state.selected_cell:
             "iceServers": [
                 {"urls": ["stun:stun.l.google.com:19302"]},
                 {
-                    "urls": ["turn:relay1.expressturn.com:3478"],
+                    "urls": ["turn:relay1.expressturn.com:3478?transport=tcp"],
                     "username": "efree",
                     "credential": "efree"
                 }

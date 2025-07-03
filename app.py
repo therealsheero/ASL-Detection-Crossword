@@ -72,46 +72,49 @@ class ASLTransformer(VideoProcessorBase):
         self.current_sign = ""
         self.current_probs = None
         self.input_frame = None
-
+        self.error = None
     def transform(self, frame):
-        img = frame.to_ndarray(format="bgr24")
+        try:
+            img = frame.to_ndarray(format="bgr24")
+            hands, img = self.detector.findHands(img)
 
-        hands, img = self.detector.findHands(img)
+            if hands:
+                x, y, w, h = hands[0]['bbox']
+                offset = 20
+                imgCrop = img[y-offset:y+h+offset, x-offset:x+w+offset]
 
-        if hands:
-            x, y, w, h = hands[0]['bbox']
-            offset = 20
-            imgCrop = img[y-offset:y+h+offset, x-offset:x+w+offset]
+                if imgCrop.shape[0] > 0 and imgCrop.shape[1] > 0:
+                    imgGray = cv2.cvtColor(imgCrop, cv2.COLOR_BGR2GRAY)
+                    imgGray = cv2.equalizeHist(imgGray)
+                    pil_img = Image.fromarray(imgGray)
+                    img_tensor = transform(pil_img).unsqueeze(0).to(device)
 
-            if imgCrop.shape[0] > 0 and imgCrop.shape[1] > 0:
-                imgGray = cv2.cvtColor(imgCrop, cv2.COLOR_BGR2GRAY)
-                imgGray = cv2.equalizeHist(imgGray)
-                pil_img = Image.fromarray(imgGray)
-                img_tensor = transform(pil_img).unsqueeze(0).to(device)
+                    with torch.no_grad():
+                        output = model(img_tensor)
+                        probs = F.softmax(output, dim=1)
+                        confidence, predicted = torch.max(probs, 1)
+                        sign = labels[predicted.item()]
+                        conf = confidence.item()
 
-                with torch.no_grad():
-                    output = model(img_tensor)
-                    probs = F.softmax(output, dim=1)
-                    confidence, predicted = torch.max(probs, 1)
-                    sign = labels[predicted.item()]
-                    conf = confidence.item()
+                    self.current_sign = sign
+                    self.current_probs = probs.cpu()
+                    self.input_frame = imgGray
 
-                self.current_sign = sign
-                self.current_probs = probs.cpu()
-                self.input_frame = imgGray
-
-                label_y = y - 10 if y - 30 > 10 else y + h + 30
-                cv2.putText(
-                    img,
-                    f"{sign} ({conf:.2f})",
-                    (x, label_y),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,
-                    (0, 255, 0),
-                    2
-                )
-                cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
-
+                    label_y = y - 10 if y - 30 > 10 else y + h + 30
+                    cv2.putText(
+                        img,
+                        f"{sign} ({conf:.2f})",
+                        (x, label_y),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        1,
+                        (0, 255, 0),
+                        2
+                    )
+                    cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                                
+        except Exception as e:
+            self.error = str(e)
+            st.error(f"Video processing error: {e}")
         return img
 
 # -------------------- Load Crossword Data --------------------
@@ -194,28 +197,103 @@ for row_idx in range(rows):
             )
 
 # -------------------- Webcam & Prediction --------------------
+# -------------------- Webcam & Prediction --------------------
 if st.session_state.selected_cell:
     st.success(f"Selected Cell: {st.session_state.selected_cell}")
+    
+    # Updated RTC Configuration with multiple STUN servers and better TURN configuration
     RTC_CONFIGURATION = RTCConfiguration(
         {
             "iceServers": [
-                { "urls": ["stun:stun.l.google.com:19302"] },
+                # Primary STUN servers
+                {"urls": "stun:stun.l.google.com:19302"},
+                {"urls": "stun:stun1.l.google.com:19302"},
+                {"urls": "stun:stun2.l.google.com:19302"},
+                
+                # Backup STUN servers
+                {"urls": "stun:stun.services.mozilla.com"},
+                {"urls": "stun:global.stun.twilio.com:3478"},
+                
+                # TURN server with credentials
                 {
-                    "urls": ["turn:numb.viagenie.ca"],
+                    "urls": "turn:numb.viagenie.ca",
                     "username": "webrtc@live.com",
-                    "credential": "muazkh"
+                    "credential": "muazkh",
+                    "credentialType": "password"
+                },
+                
+                # Additional backup TURN server
+                {
+                    "urls": "turn:openrelay.metered.ca:80",
+                    "username": "openrelayproject",
+                    "credential": "openrelayproject"
                 }
-            ]
+            ],
+            "iceTransportPolicy": "all",  # Try both relay and non-relay candidates
+            "bundlePolicy": "max-bundle",  # Better for mobile
+            "rtcpMuxPolicy": "require"  # Reduces port usage
         }
     )
-
     webrtc_ctx = webrtc_streamer(
         key=f"asl-crossword-{st.session_state.selected_cell}",
         video_processor_factory=ASLTransformer,
-        rtc_configuration=RTC_CONFIGURATION,
-        media_stream_constraints={"video": True, "audio": False},
+        rtc_configuration=get_rtc_config(),
+        media_stream_constraints={
+            "video": {
+                "width": {"ideal": 640},
+                "height": {"ideal": 480},
+                "frameRate": {"ideal": 30}
+            },
+            "audio": False
+        },
         async_processing=True,
+        async_transform=True
     )
+    # ADD THE FALLBACK UPLOAD SECTION RIGHT HERE
+    if not webrtc_ctx.state.playing:
+        st.warning("Camera not accessible. Using fallback image upload.")
+        uploaded_file = st.file_uploader("Upload hand sign image", type=["jpg", "png", "jpeg"])
+        if uploaded_file:
+            # Process uploaded image using your existing detection logic
+            image = Image.open(uploaded_file)
+            img_array = np.array(image)
+            
+            # Reuse your hand detection and prediction code
+            detector = HandDetector(maxHands=1)
+            hands, img_array = detector.findHands(img_array)
+            
+            if hands:
+                x, y, w, h = hands[0]['bbox']
+                offset = 20
+                imgCrop = img_array[y-offset:y+h+offset, x-offset:x+w+offset]
+                
+                if imgCrop.shape[0] > 0 and imgCrop.shape[1] > 0:
+                    imgGray = cv2.cvtColor(imgCrop, cv2.COLOR_BGR2GRAY)
+                    imgGray = cv2.equalizeHist(imgGray)
+                    pil_img = Image.fromarray(imgGray)
+                    img_tensor = transform(pil_img).unsqueeze(0).to(device)
+                    
+                    with torch.no_grad():
+                        output = model(img_tensor)
+                        probs = F.softmax(output, dim=1)
+                        confidence, predicted = torch.max(probs, 1)
+                        sign = labels[predicted.item()]
+                        conf = confidence.item()
+                    
+                    st.session_state.current_letter = sign
+                    st.info(f"Detected Letter: {sign}")
+                    
+                    # Show the processed image
+                    st.subheader("🖼️ Uploaded Hand Image")
+                    st.image(imgGray, caption="Processed Grayscale Hand Image", channels="GRAY")
+                    
+                    # Show predictions
+                    st.subheader("📊 Model Predictions")
+                    top_probs, top_indices = torch.topk(probs.squeeze(), 5)
+                    top_labels = [labels[i] for i in top_indices.tolist()]
+                    prob_df = pd.DataFrame({'Sign': top_labels, 'Confidence': top_probs.tolist()})
+                    st.bar_chart(prob_df.set_index('Sign'))
+                    
     if webrtc_ctx.state.playing:
         st.success("WebRTC connection is live 🎥")
     else:

@@ -69,10 +69,10 @@ python test.py
 ## 🎮 ASL-Powered Crossword Game
 
 ```bash
-python app.py 
+python app2.py 
 ```
 ```bash
-streamlit run app.py
+streamlit run app2.py
 ```
 
 **How it works**:
@@ -98,7 +98,7 @@ This game helps users reinforce their learning through interaction — as each c
 * `Collect_Data.py`: Hand tracking + data saver
 * `train_pth.ipynb`: Model training pipeline
 * `test.py`: Live webcam detection
-* `app.py`: **ASL Crossword Game Application**
+* `app2.py`: **ASL Crossword Game Application**
 
 ---
 
@@ -107,7 +107,7 @@ This game helps users reinforce their learning through interaction — as each c
 * Collect your own ASL dataset using `Collect_Data.py`
 * Train the model with `train_pth.ipynb`
 * Test real-time ASL detection with `test.py`
-* Play the ASL-powered crossword game using `app.py`
+* Play the ASL-powered crossword game using `app2.py`
 
 This model can be integrated into a real-time webcam-based ASL interpreter using OpenCV and MediaPipe or cvzone. Load the model, capture the hand ROI, preprocess it, and run predictions — now also connected to the crossword game for interactive learning!
 

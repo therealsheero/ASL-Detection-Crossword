@@ -237,7 +237,7 @@ if st.session_state.selected_cell:
     webrtc_ctx = webrtc_streamer(
         key=f"asl-crossword-{st.session_state.selected_cell}",
         video_processor_factory=ASLTransformer,
-        rtc_configuration=get_rtc_config(),
+        rtc_configuration=RTC_CONFIGURATION,
         media_stream_constraints={
             "video": {
                 "width": {"ideal": 640},

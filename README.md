@@ -1,6 +1,6 @@
 ---
 
-# 🤟 ASL Sign Language Detection + Crossword Game using MobileNetV2
+#  ASL Sign Language Detection + Crossword Game using MobileNetV2
 
 This project focuses on detecting American Sign Language (ASL) hand gestures using deep learning and taking it a step further — using those detected signs to play a simple **crossword game**. The system includes data collection with OpenCV and MediaPipe, training a MobileNetV2-based image classification model, and evaluating its performance on a custom dataset of ASL signs (0-9 and A-Z).
 
@@ -8,14 +8,14 @@ By integrating ASL recognition with an interactive crossword puzzle, we aim to m
 
 ---
 
-## 🛠️ Installation
+## Installation
 
 ```bash
 git clone https://github.com/therealsheero/ASL-Detection-Crossword
 cd ASL-Detection-Crossword
 ```
 
-📦 Requirements
+Requirements
 Install the required packages using:
 
 ```bash
@@ -24,7 +24,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🖐️ Data Collection
+## Data Collection
 
 ```bash
 python Collect_Data.py 
@@ -38,7 +38,7 @@ python Collect_Data.py
 
 ---
 
-## 🧠 Model Training
+## Model Training
 
 ```bash
 python train_pth.ipynb 
@@ -57,7 +57,7 @@ Test Accuracy: 98.3%
 
 ---
 
-## ▶️ Real-Time Detection
+## Real-Time Detection
 
 ```bash
 python test.py 
@@ -66,7 +66,7 @@ python test.py
 
 ---
 
-## 🎮 ASL-Powered Crossword Game
+## ASL-Powered Crossword Game
 
 ```bash
 python app2.py 
@@ -85,7 +85,7 @@ This game helps users reinforce their learning through interaction — as each c
 
 ---
 
-## 📊 Performance
+## Performance
 
 | Metric   | Value |
 | -------- | ----- |
@@ -93,7 +93,7 @@ This game helps users reinforce their learning through interaction — as each c
 
 ---
 
-## 🌟 Key Files
+## Key Files
 
 * `Collect_Data.py`: Hand tracking + data saver
 * `train_pth.ipynb`: Model training pipeline
@@ -102,7 +102,7 @@ This game helps users reinforce their learning through interaction — as each c
 
 ---
 
-## ▶️ How to Use
+## How to Use
 
 * Collect your own ASL dataset using `Collect_Data.py`
 * Train the model with `train_pth.ipynb`
@@ -125,7 +125,7 @@ This model can be integrated into a real-time webcam-based ASL interpreter using
 
 ---
 
-## 🚀 Future Work
+## Future Work
 
 * Add multiplayer crossword challenges
 * Improve dataset diversity with more hand shapes and lighting conditions
@@ -134,7 +134,7 @@ This model can be integrated into a real-time webcam-based ASL interpreter using
  
 ---
 
-## 📧 Contact
+## Contact
 
 [2004divyanshii@gmail.com](mailto:2004divyanshii@gmail.com)
 

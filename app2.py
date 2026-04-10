@@ -11,7 +11,6 @@ from cvzone.HandTrackingModule import HandDetector
 import pandas as pd
 import random
 
-# -------------------- Basic Page Setup --------------------
 st.set_page_config(page_title="ASL Crossword", layout="wide")
 
 def set_bg_color():
@@ -37,11 +36,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("🧩 ASL Crossword Puzzle Game")
+st.title("ASL Crossword Puzzle Game")
 
 set_bg_color()
 
-# -------------------- Load Model --------------------
 @st.cache_resource
 def load_model():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -64,7 +62,6 @@ transform = transforms.Compose([
                          [0.229, 0.224, 0.225])
 ])
 
-# -------------------- Video Transformer --------------------
 class ASLTransformer(VideoTransformerBase):
     def __init__(self):
         self.detector = HandDetector(maxHands=1)
@@ -109,13 +106,10 @@ class ASLTransformer(VideoTransformerBase):
 
         return img
 
-# -------------------- Load Crossword Data --------------------
 def load_crossword_data():
-    # Replace this with your CSV path
-    crossword_data = pd.read_csv("kids_crossword_data.csv")  # Example: csv file path
+    crossword_data = pd.read_csv("kids_crossword_data.csv") 
     return crossword_data
 
-# -------------------- Create Crossword Hints --------------------
 def create_clues(crossword_data):
     across_clues = []
     down_clues = []
@@ -131,8 +125,6 @@ def create_clues(crossword_data):
             down_clues.append(f"Clue: {clue}")
 
     return across_clues, down_clues
-
-# -------------------- Crossword Board Setup --------------------
 rows, cols = 5, 5
 
 if "board" not in st.session_state:
@@ -230,7 +222,6 @@ if st.session_state.selected_cell:
         st.session_state.selected_cell = None
         st.session_state.current_letter = ""
 
-# -------------------- Display crossword and ASL chart side by side --------------------
 crossword_data = load_crossword_data()
 across_clues, down_clues = create_clues(crossword_data)
 
@@ -258,7 +249,7 @@ with col1:
 with col2:
     st.subheader("🤟 ASL Alphabet Reference")
 
-    asl_chart = Image.open("asl_alphabets.jpg")  # Your ASL Chart file here
+    asl_chart = Image.open("asl_alphabets.jpg")  
     st.image(asl_chart, caption="American Sign Language Alphabets", use_container_width=True)
 
     st.markdown(

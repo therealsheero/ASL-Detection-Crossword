@@ -136,7 +136,7 @@ This model can be integrated into a real-time webcam-based ASL interpreter using
 
 ## Contact
 
-[2004divyanshii@gmail.com](mailto:2004divyanshii@gmail.com)
+[therealsheero@gmail.com](mailto:therealsheero@gmail.com)
 
 ---
 
